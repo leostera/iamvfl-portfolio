@@ -2,14 +2,23 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var PageSchema = new Schema({
-  title: String,
-  url: String,
+  title: {
+    type: String,
+    required: true
+  },
+  url: {
+    type: String,
+    required: true,
+    index: { unique: true }
+  },
   content: String,
 
   meta: {
-    hidden: { type: Boolean, default: true },
-    created: { type: Date, default: Date.now },
-    modified: Date
+    hidden: {
+      type: Boolean,
+      required: true,
+      default: true
+    }
   }
 });
 
