@@ -1,17 +1,14 @@
+// Dependencies
+var express = require('express'),
+    http = require('http'),
+    path = require('path'),
 
-/**
- * Module dependencies.
- */
+    database = require('./config/database');
 
-var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
-var http = require('http');
-var path = require('path');
+var app = express(),
+    routes = require('./config/routes').dispatch(app);
 
-var app = express();
-
-// all environments
+// Configuration
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
@@ -20,20 +17,17 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
+app.use(express.cookieParser('dark-secret-bonobo'));
 app.use(express.session());
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// development only
+// Development environment config
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
-app.get('/users', user.list);
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+http.createServer(app).listen(app.get('port'), function() {
+  console.log('Server listening on port ' + app.get('port'));
 });
