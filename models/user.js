@@ -1,4 +1,5 @@
-var mongoose = require('mongoose'),
+var bcrypt = require('bcrypt'),
+    mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
@@ -7,7 +8,7 @@ var UserSchema = new Schema({
     required: true,
     index: { unique: true }
   },
-  password_hash: {
+  password: {
     type: String,
     required: true
   },
