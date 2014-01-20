@@ -1,11 +1,10 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var ArticleSchema = new Schema({
+var PageSchema = new Schema({
   title: String,
   url: String,
   content: String,
-  author: Schema.Types.ObjectId,
 
   meta: {
     hidden: { type: Boolean, default: true },
@@ -14,4 +13,4 @@ var ArticleSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('Article', ArticleSchema);
+module.exports = mongoose.model('Page', PageSchema);
