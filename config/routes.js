@@ -2,7 +2,6 @@ var siteController = require('../controllers/site'),
     userController = require('../controllers/user'),
     blogController = require('../controllers/blog');
 
-
 exports.dispatch = function (app) {
 
   // Pages
