@@ -28,8 +28,6 @@ module.exports = {
    */
   generate: function (done) {
     var sample_data = [],
-        
-        // We'll iterate using this for writing to our database asynchronously
         async_iterator = 0;
 
     // Generate the sample data
