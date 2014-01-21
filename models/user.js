@@ -19,7 +19,7 @@ var UserSchema = new Schema({
   slug: {
     type: String,
     required: true,
-    index: { unique: true }
+    unique: true
   },
   bio: String,
 
@@ -35,6 +35,16 @@ var UserSchema = new Schema({
       default: Date.now,
     }
   }
+});
+
+/**
+ * Converts the username to a slug if it's not already set
+ */
+UserSchema.pre('save', function (next) {
+  if(!this.slug)
+    this.slug = utils.slugify(this.username);
+
+  next();
 });
 
 module.exports = mongoose.model('User', UserSchema);
