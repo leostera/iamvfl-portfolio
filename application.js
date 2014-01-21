@@ -1,10 +1,11 @@
-// Dependencies
 var express = require('express'),
     http = require('http'),
     path = require('path'),
+    passport = require('passport'),
 
     database = require('./config/database');
 
+// Application object
 var app = express(),
     routes = require('./config/routes').dispatch(app);
 
@@ -19,6 +20,8 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('dark-bonobo-father'));
 app.use(express.session());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));

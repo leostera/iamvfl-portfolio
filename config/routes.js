@@ -6,7 +6,8 @@ exports.dispatch = function (app) {
 
   // Pages
   app.get( '/', siteController.index );
-  app.get( '/:pageURL', siteController.findPageByURL);
+  app.get( '/all', siteController.getAllPages );
+  app.get( '/:slug', siteController.getPageBySlug );
 
   // API
   // app.get( '/api/users', userController.index );

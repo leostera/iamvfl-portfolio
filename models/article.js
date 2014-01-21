@@ -5,8 +5,8 @@ var ArticleSchema = new Schema({
   title: {
     type: String,
     required: true
-  }
-  url: {
+  },
+  slug: {
     type: String,
     required: true,
     index: { unique: true }

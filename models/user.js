@@ -16,9 +16,9 @@ var UserSchema = new Schema({
     type: String,
     required: true
   },
-  url: {
+  slug: {
     type: String,
-    required: true
+    required: true,
     index: { unique: true }
   },
   bio: String

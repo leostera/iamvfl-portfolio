@@ -1,12 +1,14 @@
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+    Schema = mongoose.Schema,
+
+    utils = require('../helpers/utils');
 
 var PageSchema = new Schema({
   title: {
     type: String,
     required: true
   },
-  url: {
+  slug: {
     type: String,
     required: true,
     index: { unique: true }
@@ -17,9 +19,19 @@ var PageSchema = new Schema({
     hidden: {
       type: Boolean,
       required: true,
-      default: true
+      default: false
     }
   }
+});
+
+/**
+ * Converts the title to a slug if it's not already set
+ */
+PageSchema.pre('save', function (next) {
+  if(!this.slug)
+    this.slug = utils.slugify(this.title);
+
+  next();
 });
 
 module.exports = mongoose.model('Page', PageSchema);
