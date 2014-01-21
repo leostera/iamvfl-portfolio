@@ -21,7 +21,20 @@ var UserSchema = new Schema({
     required: true,
     index: { unique: true }
   },
-  bio: String
+  bio: String,
+
+  meta: {
+    created: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+    modified: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    }
+  }
 });
 
 module.exports = mongoose.model('User', UserSchema);

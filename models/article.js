@@ -22,6 +22,16 @@ var ArticleSchema = new Schema({
       type: Boolean,
       required: true,
       default: true
+    },
+    created: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+    modified: {
+      type: Date,
+      required: true,
+      default: Date.now,
     }
   }
 });
