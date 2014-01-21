@@ -17,9 +17,8 @@ module.exports = {
   /**
    * Turns a regular old string to a slug (e.g. 'My Name is John' => 'my-name-is-john')
    */
-  slugify: function (string) {
-    return string
-      .toLowercase()
+  slugify: function (text) {
+    return text.toLowerCase()
       .replace(/[^\w ]+/g,'')
       .replace(/ +/g,'-');
   }

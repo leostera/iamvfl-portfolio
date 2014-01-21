@@ -10,8 +10,7 @@ var PageSchema = new Schema({
   },
   slug: {
     type: String,
-    required: true,
-    index: { unique: true }
+    unique: true
   },
   content: String,
 
@@ -20,6 +19,16 @@ var PageSchema = new Schema({
       type: Boolean,
       required: true,
       default: false
+    },
+    created: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+    modified: {
+      type: Date,
+      required: true,
+      default: Date.now,
     }
   }
 });

@@ -2,12 +2,22 @@ var dbHelper = require('./helpers/database');
 
 module.exports = function (grunt) {
 
-  grunt.registerTask('db:sample', 'Generates sample data for the application.', function () {
-    dbHelper.sample();
+  /**
+   * db:generate
+   */
+  grunt.registerTask('db:generate', 'Generates sample data for the application.', function () {
+    var done = this.async();
+
+    dbHelper.generate(done);
   });
 
-  grunt.registerTask('db:erase', 'Erases all data from the application.', function () {
-    dbHelper.erase();
+  /**
+   * db:erase
+   */
+  grunt.registerTask('db:delete', 'Erases all data from the application.', function () {
+    var done = this.async();
+
+    dbHelper.delete(done);
   });
 
 };

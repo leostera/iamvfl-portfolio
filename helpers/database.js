@@ -1,52 +1,84 @@
-// Dependencies
-var database = require('../config/database'),
-    utils = require('./utils'),
+var grunt = require('grunt'),
     Charlatan = require('charlatan'),
+
+    database = require('../config/database'),
+    utils = require('./utils'),
 
     Page = require('../models/page'),
     User = require('../models/user'),
     Article = require('../models/article');
 
 module.exports = {
+
+  /**
+   * Generates sample pages as dummy data
+   */
+  generatePages: function (count, data) {
+    // Generate pages ages
+    for(var i = 0; i < count; i++) {
+      data[i] = new Page({
+        title: Charlatan.Helpers.capitalize(Charlatan.Lorem.words(1).join(' ')),
+        content: '<p>' + Charlatan.Lorem.paragraph(utils.randomInt(5, 25)) + '</p>'
+      });
+    }
+  },
+
   /**
    * Populates the database with sample data
    */
-  sample: function () {
+  generate: function (done) {
     var sample_data = [],
+        
+        // We'll iterate using this for writing to our database asynchronously
+        async_iterator = 0;
 
-        page_count = 5,
-        user_count = 10,
-        article_count = 10;
+    // Generate the sample data
+    this.generatePages(5, sample_data);
 
-    // Pages
-    for(var i = 0; i < page_count; i++) {
-      sample_data[i] = new Page({
-        title: Charlatan.Lorem.words(utils.randomInt(1, 6)),
-        content: Charlatan.Lorem.paragraphs(utils.randomInt(1, 6))
+    // Just complete the task if there's nothing to insert
+    if(!sample_data.length || sample_data.length === 0)
+      done(true);
+
+    // Save each item of the array in the database
+    sample_data.forEach(function (item) {
+      item.save(function (err, doc) {
+        async_iterator++;
+
+        if(err) {
+          grunt.log.error(err);
+
+          done(false);
+        }
+        else {
+          grunt.log.ok('Writing object: ' + doc._id);
+
+          // Complete the async task if this is the last item in the array
+          if (async_iterator === sample_data.length)
+            done(true);
+        }
       });
-    }
-
-    // Save to the database
-    for(var i = 0; i < sample_data.length; i++) {
-      sample_data[i].save(function (err, res) {
-        if(err)
-          console.log(err);
-      });
-    }
-
-    console.log('database is now populated with sample data!');
+    });
   },
 
   /**
    * Wipes all data from the database
    */
-  erase: function () {
+  delete: function (done) {
     // Pages
-    Page.remove(function (err, res) {
-      if(err)
-        console.log(err);
+    Page.remove(function (err, docs) {
+
+      if(err) {
+        grunt.log.error(err);
+
+        done(false);
+      }
+      else {
+        grunt.log.ok('Successfully erased database!');
+
+        done(true);
+      }
+
     });
-    
-    console.log('successfully erased database!');
   }
-}
+
+};
