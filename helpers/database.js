@@ -33,7 +33,7 @@ module.exports = {
         async_iterator = 0;
 
     // Generate the sample data
-    this.generatePages(5, sample_data);
+    this.generatePages(3, sample_data);
 
     // Just complete the task if there's nothing to insert
     if(!sample_data.length || sample_data.length === 0)
