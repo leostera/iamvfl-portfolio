@@ -4,22 +4,63 @@ var grunt = require('grunt'),
     database = require('../config/database'),
     utils = require('./utils'),
 
-    Page = require('../models/page'),
-    User = require('../models/user'),
-    Article = require('../models/article');
+    Page = require('../schema/page').Model,
+    User = require('../schema/user').Model,
+    Article = require('../schema/article').Model,
+
+    ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = {
 
   /**
-   * Generates sample pages as dummy data
+   * Generates the sample pages
    */
   generatePages: function (count, data) {
-    // Generate pages ages
+    var sample;
+
     for(var i = 0; i < count; i++) {
-      data[i] = new Page({
+      sample = new Page({
         title: Charlatan.Helpers.capitalize(Charlatan.Lorem.words(1).join(' ')),
-        content: '<p>' + Charlatan.Lorem.paragraph(utils.randomInt(5, 25)) + '</p>'
+        content: '<p>' + Charlatan.Lorem.paragraph(20) + '</p>'
       });
+
+      data.push(sample);
+    }
+  },
+
+  /**
+   * Generates the sample users
+   */
+  generateUsers: function (count, data) {
+    var sample;
+
+    for(var i = 0; i < count; i++) {
+      sample = new User({
+        username: Charlatan.Internet.userName(),
+        password: 'password',
+        name: Charlatan.Name.name(),
+        email: Charlatan.Internet.email(),
+        bio: Charlatan.Lorem.paragraph(5, 25)
+      });
+
+      data.push(sample);
+    }
+  },
+
+  /**
+   * Generates the sample articles
+   */
+  generateArticles: function (count, data) {
+    var sample;
+
+    for(var i = 0; i < count; i++) {
+      sample = new Article({
+        title: Charlatan.Helpers.capitalize(Charlatan.Lorem.words(5).join(' ')),
+        content: '<p>' + Charlatan.Lorem.paragraph(20) + '</p>',
+        author: new ObjectId()
+      });
+
+      data.push(sample);
     }
   },
 
@@ -32,6 +73,8 @@ module.exports = {
 
     // Generate the sample data
     this.generatePages(3, sample_data);
+    this.generateUsers(10, sample_data);
+    this.generateArticles(10, sample_data);
 
     // Just complete the task if there's nothing to insert
     if(!sample_data.length || sample_data.length === 0)
@@ -64,18 +107,26 @@ module.exports = {
   delete: function (done) {
     // Pages
     Page.remove(function (err, docs) {
-
-      if(err) {
+      if(err)
         grunt.log.error(err);
-
-        done(false);
-      }
-      else {
+      else
         grunt.log.ok('Successfully erased database!');
+    });
 
-        done(true);
-      }
+    // Articles
+    Article.remove(function (err, docs) {
+      if(err)
+        grunt.log.error(err);
+      else
+        grunt.log.ok('Successfully erased database!');
+    });
 
+    // Users
+    User.remove(function (err, docs) {
+      if(err)
+        grunt.log.error(err);
+      else
+        grunt.log.ok('Successfully erased database!');
     });
   }
 

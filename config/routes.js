@@ -1,18 +1,19 @@
-var pageController = require('../controllers/page'),
-    userController = require('../controllers/user'),
-    articleController = require('../controllers/article');
+var Page = require('../schema/page'),
+    User = require('../schema/user'),
+    Article = require('../schema/article');
 
 exports.dispatch = function (app) {
 
-  // API
   // Pages
-  app.get( '/api/pages', pageController.findAll );
-  app.get( '/api/pages/:slug', pageController.findBySlug );
+  app.get( '/api/pages', Page.findAll );
+  app.get( '/api/pages/:slug', Page.findBySlug );
 
-  app.get( '/api/users', userController.findAll );
-  app.get( '/api/users/:slug', userController.findBySlug );
+  // Users
+  app.get( '/api/users', User.findAll );
+  app.get( '/api/users/:slug', User.findBySlug );
 
-  // app.get( '/api/articles', articleController.index );
-  // app.get( '/api/articles/:id', articleController.findById );
+  // Articles
+  app.get( '/api/articles', Article.findAll );
+  app.get( '/api/articles/:slug', Article.findBySlug );
 
 };
