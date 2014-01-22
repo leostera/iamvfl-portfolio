@@ -1,4 +1,4 @@
-var siteController = require('../controllers/site'),
+var pageController = require('../controllers/page'),
     userController = require('../controllers/user'),
     articleController = require('../controllers/article');
 
@@ -6,8 +6,8 @@ exports.dispatch = function (app) {
 
   // API
   // Pages
-  app.get( '/api/pages', siteController.findAll );
-  app.get( '/api/pages/:slug', siteController.findBySlug );
+  app.get( '/api/pages', pageController.findAll );
+  app.get( '/api/pages/:slug', pageController.findBySlug );
 
   app.get( '/api/users', userController.findAll );
   app.get( '/api/users/:slug', userController.findBySlug );

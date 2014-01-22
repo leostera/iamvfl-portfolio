@@ -4,7 +4,7 @@ module.exports = {
 
   // GET '/api/users'
   findAll: function (req, res) {
-    var query = Page.find();
+    var query = User.find();
     query.exec(function (err, docs) {
       if(err)
         res.json(500, { message: err });
@@ -15,7 +15,7 @@ module.exports = {
 
   // GET '/api/users/:slug'
   findBySlug: function (req, res) {
-    var query = Page.findOne({ slug: req.params.slug });
+    var query = User.findOne({ slug: req.params.slug });
     query.exec(function (err, doc) {
       if(err)
         res.json(500, { message: err });
