@@ -1,7 +1,7 @@
 iamvfl.com
 =========
 
-This is the project for my new portfolio site which will be available [here] [http://www.iamvfl.com] shortly. It features a redesign and a pretty nifty stack:
+This is the project for my new portfolio site which will be available [here](http://www.iamvfl.com) once it is complete. It features a redesign and a pretty nifty stack:
 - Node
 - Express
 - MongoDB
