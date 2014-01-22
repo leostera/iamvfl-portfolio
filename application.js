@@ -22,7 +22,6 @@ app.use(express.session());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Development environment config
 if ('development' == app.get('env')) {
