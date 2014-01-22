@@ -12,7 +12,7 @@ module.exports = function (grunt) {
   });
 
   /**
-   * db:erase
+   * db:delete
    */
   grunt.registerTask('db:delete', 'Erases all data from the application.', function () {
     var done = this.async();
