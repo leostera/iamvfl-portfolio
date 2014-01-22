@@ -4,14 +4,13 @@ var siteController = require('../controllers/site'),
 
 exports.dispatch = function (app) {
 
-  // Pages
-  app.get( '/', siteController.index );
-  app.get( '/all', siteController.getAllPages );
-  app.get( '/:slug', siteController.getPageBySlug );
-
   // API
-  // app.get( '/api/users', userController.index );
-  // app.get( '/api/users/:id', userController.findById );
+  // Pages
+  app.get( '/api/pages', siteController.findAll );
+  app.get( '/api/pages/:slug', siteController.findBySlug );
+
+  app.get( '/api/users', userController.findAll );
+  app.get( '/api/users/:slug', userController.findBySlug );
 
   // app.get( '/api/articles', articleController.index );
   // app.get( '/api/articles/:id', articleController.findById );
