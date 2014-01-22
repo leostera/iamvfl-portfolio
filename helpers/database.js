@@ -13,7 +13,7 @@ var grunt = require('grunt'),
 module.exports = {
 
   /**
-   * Generates the sample pages
+   * Generates fake page instances
    */
   generatePages: function (count, data) {
     var sample;
@@ -29,7 +29,7 @@ module.exports = {
   },
 
   /**
-   * Generates the sample users
+   * Generates fake user instances
    */
   generateUsers: function (count, data) {
     var sample;
@@ -48,7 +48,7 @@ module.exports = {
   },
 
   /**
-   * Generates the sample articles
+   * Generates fake article instances
    */
   generateArticles: function (count, data) {
     var sample;
