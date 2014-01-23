@@ -2,6 +2,7 @@ var bcrypt = require('bcrypt'),
     mongoose = require('mongoose'),
     Schema = mongoose.Schema,
 
+    base = require('./base'),
     utils = require('../helpers/utils');
 
 var UserSchema = new Schema({
@@ -27,21 +28,10 @@ var UserSchema = new Schema({
     index: { unique: true }
   },
   photo: String,
-  bio: String,
-
-  meta: {
-    created: {
-      type: Date,
-      required: true,
-      default: Date.now,
-    },
-    modified: {
-      type: Date,
-      required: true,
-      default: Date.now,
-    }
-  }
+  bio: String
 });
+
+UserSchema.plugin(base.Schema);
 
 UserSchema.pre('save', function (next) {
   if(!this.slug)
@@ -81,34 +71,5 @@ UserSchema.methods.comparePassword = function (candidate, callback) {
 // The mongoose object performing operations on the database
 var User = mongoose.model('User', UserSchema);
 
-module.exports = {
-
-  Model: User,
-
-  /**
-   * GET '/api/users'
-   */
-  findAll: function (req, res) {
-    var query = User.find();
-    query.exec(function (err, docs) {
-      if(err)
-        res.json(500, { message: err });
-      else
-        res.json(200, docs);
-    });
-  },
-
-  /**
-   * GET '/api/users/:slug'
-   */
-  findBySlug: function (req, res) {
-    var query = User.find({ slug: req.params.slug });
-    query.exec(function (err, docs) {
-      if(err)
-        res.json(500, { message: err });
-      else
-        res.json(200, docs);
-    });
-  }
-
-};
+module.exports = base.Model;
+module.exports.Model = User;

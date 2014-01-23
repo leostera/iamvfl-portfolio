@@ -105,29 +105,24 @@ module.exports = {
    * Wipes all data from the database
    */
   delete: function (done) {
+
+    var cb = function (name) {
+      return function (err, docs) {
+        if(err)
+          grunt.log.error(err);
+        else
+          grunt.log.ok('Successfully erased '+name+'s!');
+      }
+    };
+
     // Pages
-    Page.remove(function (err, docs) {
-      if(err)
-        grunt.log.error(err);
-      else
-        grunt.log.ok('Successfully erased database!');
-    });
+    Page.remove(cb('page'));
 
     // Articles
-    Article.remove(function (err, docs) {
-      if(err)
-        grunt.log.error(err);
-      else
-        grunt.log.ok('Successfully erased database!');
-    });
+    Article.remove(cb('article'));
 
     // Users
-    User.remove(function (err, docs) {
-      if(err)
-        grunt.log.error(err);
-      else
-        grunt.log.ok('Successfully erased database!');
-    });
+    User.remove(cb('user'));
   }
 
 };

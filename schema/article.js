@@ -1,6 +1,8 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
 
+    base = require('./base'),
+
     utils = require('../helpers/utils');
 
 var ArticleSchema = new Schema({
@@ -16,26 +18,10 @@ var ArticleSchema = new Schema({
   author: {
     type: Schema.Types.ObjectId,
     required: true
-  },
-
-  meta: {
-    hidden: {
-      type: Boolean,
-      required: true,
-      default: true
-    },
-    created: {
-      type: Date,
-      required: true,
-      default: Date.now,
-    },
-    modified: {
-      type: Date,
-      required: true,
-      default: Date.now,
-    }
   }
 });
+
+ArticleSchema.plugin(base.Schema);
 
 ArticleSchema.pre('save', function (next) {
   if(!this.slug)
@@ -46,34 +32,5 @@ ArticleSchema.pre('save', function (next) {
 
 var Article = mongoose.model('Article', ArticleSchema);
 
-module.exports = {
-
-  Model: Article,
-
-  /**
-   * GET '/articles'
-   */
-  findAll: function (req, res) {
-    var query = Article.find();
-    query.exec(function (err, docs) {
-      if(err)
-        res.json(500, { message: err });
-      else
-        res.json(200, docs);
-    });
-  },
-
-  /**
-   * GET '/api/articles/:slug'
-   */
-  findBySlug: function (req, res) {
-    var query = Article.find({ slug: req.params.slug });
-    query.exec(function (err, docs) {
-      if(err)
-        res.json(500, { message: err });
-      else
-        res.json(200, docs);
-    });
-  }
-
-};
+module.exports = base.Model;
+module.exports.Model = Article;
