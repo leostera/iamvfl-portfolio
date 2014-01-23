@@ -43,9 +43,15 @@ var UserSchema = new Schema({
   }
 });
 
+/**
+ * Slugifies the username if a slug isn't already set and generates password hash
+ * before saving to the database
+ */
 UserSchema.pre('save', function (next) {
   if(!this.slug)
     this.slug = utils.slugify(this.username);
+  else
+    this.slug = utils.slugify(this.slug); // Enforce rules eve if it's populated
 
   if(!this.isModified('password'))
     return next();
@@ -61,7 +67,7 @@ UserSchema.pre('save', function (next) {
         return next(err);
 
       this.password = hash;
-      next();
+      return next();
     }.bind(this));
   }.bind(this));
 });
@@ -73,8 +79,8 @@ UserSchema.methods.comparePassword = function (candidate, callback) {
   bcrypt.compare(candidate, this.password, function (err, matches) {
     if(err)
       return callback(err);
-    else
-      callback(null, matches);
+    
+    return callback(null, matches);
   });
 };
 
@@ -92,9 +98,23 @@ module.exports = {
     var query = User.find();
     query.exec(function (err, docs) {
       if(err)
-        res.json(500, { message: err });
-      else
-        res.json(200, docs);
+        return res.json(500, { message: err });
+      
+      return res.json(200, docs);
+    });
+  },
+
+  /**
+   * POST '/api/users'
+   */
+  new: function (req, res) {
+    var doc = new User(req.body);
+
+    doc.save(function (err, doc) {
+      if(err)
+        return res.json(500, { message: err });
+      
+      return res.json(200, doc);
     });
   },
 
@@ -103,11 +123,42 @@ module.exports = {
    */
   findBySlug: function (req, res) {
     var query = User.find({ slug: req.params.slug });
+
     query.exec(function (err, docs) {
       if(err)
-        res.json(500, { message: err });
-      else
-        res.json(200, docs);
+        return res.json(500, { message: err });
+
+      return res.json(200, docs);
+    });
+  },
+
+  /**
+   * UPDATE '/api/users/:slug'
+   */
+  update: function (req, res) {
+    var query = User.update({ slug: req.params.slug }, 
+               { $set: req.body, $inc: { count: 1 } }, 
+               { multi: false });
+
+    query.exec(function (err, doc) {
+      if(err)
+        return res.json(500, { message: err });
+
+      return res.json(200, doc);
+    });
+  },
+
+  /**
+   * DELETE '/api/users/:slug'
+   */
+  remove: function (req, res) {
+    var query = User.remove({ slug: req.params.slug });
+    query.exec(function (err, doc) {
+      if(err)
+        return res.json(500, { message: err });
+
+      // HTTP 204 is the code for no content
+      return res.json(204);
     });
   }
 
