@@ -36,6 +36,8 @@ UserSchema.plugin(base.Schema);
 UserSchema.pre('save', function (next) {
   if(!this.slug)
     this.slug = utils.slugify(this.username);
+  else
+    this.slug = utils.slugify(this.slug); // Enforce rules eve if it's populated
 
   if(!this.isModified('password'))
     return next();
@@ -51,7 +53,7 @@ UserSchema.pre('save', function (next) {
         return next(err);
 
       this.password = hash;
-      next();
+      return next();
     }.bind(this));
   }.bind(this));
 });
@@ -63,8 +65,8 @@ UserSchema.methods.comparePassword = function (candidate, callback) {
   bcrypt.compare(candidate, this.password, function (err, matches) {
     if(err)
       return callback(err);
-    else
-      callback(null, matches);
+    
+    return callback(null, matches);
   });
 };
 
